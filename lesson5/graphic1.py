@@ -1,10 +1,42 @@
-from graphics import *
+# Your function should display HTML according to a given parse tree.
 
-def main():
-    win = GraphWin("My Circle", 100, 100)
-    c = Circle(Point(50,50), 10)
-    c.draw(win)
-    win.getMouse() # Pause to view result
-    win.close()    # Close window when done
+# graphics.warning(msg) displays an error message. Upon encountering mismatched
+# tags, use graphics.warning to display the error message: "mismatched tag".
 
-main()
+# To display a tag, use graphics.begintag(tag,args) at the start and
+# graphics.endtag() at the end of the tag.
+
+import graphics
+
+def interpret(trees): # Hello, friend
+    for tree in trees: # Hello,
+        # ("word-element","Hello")
+        nodetype=tree[0] # "word-element"
+        if nodetype == "word-element":
+            graphics.word(tree[1]) 
+        elif nodetype == "tag-element":
+            # <b>Strong text</b>
+            tagname = tree[1] # b
+            tagargs = tree[2] # []
+            subtrees = tree[3] # ...Strong Text!...
+            closetagname = tree[4] # b
+        elif tagname != closetagname:
+        	graphics.warning("Warning mismatched tags")
+        else:
+        	graphics.begintag(tagname, tagargs)
+        	interpret(subtrees)
+        	graphics.endtag()
+            # QUIZ: (1) check that the tags match
+            # if not use graphics.warning()
+            #  (2): Interpret the subtree
+            # HINT: Call interpret recursively
+
+
+
+# Note that graphics.initialize and finalize will only work surrounding a call
+# to interpret
+
+graphics.initialize() # Enables display of output.\
+interpret([("word-element","Hello")])
+graphics.finalize() # Enables display of output.
+
